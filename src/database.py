@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm import declarative_base
 
 import config
 
@@ -13,5 +13,4 @@ engine = create_engine(
 session_factory = sessionmaker(bind=engine)
 
 
-class BaseModel(DeclarativeBase):
-    pass
+Base = declarative_base()
