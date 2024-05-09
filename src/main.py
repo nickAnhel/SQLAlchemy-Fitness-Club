@@ -1,4 +1,4 @@
-from queries.orm import create_tables, add_user, get_user_by_id, get_users, update_user_first_name
+from queries.core import create_tables, add_user, get_user_by_id, get_users, update_user_first_name
 
 
 create_tables()

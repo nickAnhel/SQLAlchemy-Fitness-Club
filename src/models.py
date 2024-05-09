@@ -1,17 +1,9 @@
 import datetime
-import enum
 from sqlalchemy import ForeignKey, String, func
 from sqlalchemy.orm import Mapped, mapped_column
 
 from database import Base
-
-
-class Services(enum.Enum):
-    GYM = "Gym"
-    POOL = "Pool"
-    SAUNA = "Sauna"
-    YOGA = "Yoga"
-    CROSSFIT = "Crossfit"
+from enums import Services
 
 
 class User(Base):

@@ -29,7 +29,7 @@ def get_user_by_id(user_id: int = 1):
 def update_user_first_name(user_id: int, new_first_name: str):
     with session_factory() as session:
         user = session.query(User).filter_by(id=user_id).one_or_none()
-        user.first_name = new_first_name
+        user.first_name = new_first_name  # type: ignore
         session.commit()
 
 
