@@ -1,5 +1,7 @@
+import datetime
+
 from database import engine, session_factory, Base
-from models import User, Office, Services
+from models import User, Office, Subscription, Services
 
 
 def create_tables():
@@ -37,4 +39,11 @@ def add_office(address: str, phone: str, services: Services):
     with session_factory() as session:
         office = Office(address=address, phone=phone, services=services)
         session.add(office)
+        session.commit()
+
+
+def add_subscription(user_id: int, office_id: int, end_date: datetime.datetime):
+    with session_factory() as session:
+        subscription = Subscription(user_id=user_id, office_id=office_id, end_date=end_date)
+        session.add(subscription)
         session.commit()
