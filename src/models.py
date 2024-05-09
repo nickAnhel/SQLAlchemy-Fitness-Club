@@ -1,9 +1,9 @@
 import datetime
 import enum
-from sqlalchemy import ForeignKey, func, text
+from sqlalchemy import ForeignKey, String, func
 from sqlalchemy.orm import Mapped, mapped_column
 
-from database import BaseModel
+from database import Base
 
 
 class Services(enum.Enum):
@@ -14,34 +14,33 @@ class Services(enum.Enum):
     CROSSFIT = "Crossfit"
 
 
-class User(BaseModel):
+class User(Base):
     __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    first_name: Mapped[str]
-    last_name: Mapped[str]
+    first_name: Mapped[str] = mapped_column(String(50))
+    last_name: Mapped[str] = mapped_column(String(50))
     email: Mapped[str]
+    phone: Mapped[str | None]
 
-    created_at: Mapped[datetime.datetime] = mapped_column(server_default=text("TIMEZONE('utc', NOW())"))
-    updated_at: Mapped[datetime.datetime] = mapped_column(
-        server_default=text("TIMEZONE('utc', NOW())"), onupdate=func.now  # type: ignore
-    )
+    created_at: Mapped[datetime.datetime] = mapped_column(server_default=func.now())  # type: ignore
+    updated_at: Mapped[datetime.datetime] = mapped_column(server_default=func.now(), server_onupdate=func.now())  # type: ignore
 
 
-class Office(BaseModel):
+class Office(Base):
     __tablename__ = "offices"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     address: Mapped[str] = mapped_column(unique=True)
     phone: Mapped[str]
-    services: Mapped[list[Services]]
+    services: Mapped[Services]
 
 
-class Subscription(BaseModel):
+class Subscription(Base):
     __tablename__ = "subscriptions"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
-    office_id: Mapped[int] = mapped_column(ForeignKey("offices.id", ondelete="SET NULL"))
-    start_date: Mapped[datetime.datetime] = mapped_column(server_default=text("TIMEZONE('utc', NOW())"))
+    office_id: Mapped[int] = mapped_column(ForeignKey("offices.id", ondelete="CASCADE"))
+    start_date: Mapped[datetime.datetime] = mapped_column(server_default=func.now())  # type: ignore
     end_date: Mapped[datetime.datetime]
