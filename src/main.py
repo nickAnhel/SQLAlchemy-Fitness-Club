@@ -1,21 +1,57 @@
 import datetime
-from queries.orm import create_tables, add_user, get_user_by_id, get_users, update_user_first_name, add_office, add_subscription
 
-from enums import Services
+from models import ServiceTypes
+from crud import (
+    create_tables,
+    UserRepository,
+    ServiceRepository,
+    OfficeRepository,
+    SubscriptionRepository,
+)
 
 
 create_tables()
 
-add_user("Nick", "Anhel", "asd@localhost")
-add_user("Aduch", "Gold", "dsa@localhost")
+# Users
+UserRepository.create_user("Nick", "Anhel", "asd@localhost")
+# create_user("Aduch", "Gold", "dsa@localhost")
 
-add_office("123 Main Street", "123-456-7890", Services.GYM)
+# print(get_users())
+# print(get_user_by_id(user_id=1))
 
-add_subscription(1, 1, datetime.datetime.now() + datetime.timedelta(days=30))
+# update_user_email(user_id=1, new_email="hello@localhost")
+# print(get_user_by_id(user_id=1))
 
-print(get_users())
-print(get_user_by_id(user_id=1))
-print(get_user_by_id(user_id=2))
+# update_user_phone(user_id=1, new_phone="123-456-7890")
+# print(get_user_by_id(user_id=1))
 
-update_user_first_name(user_id=1, new_first_name="Nik")
-print(get_user_by_id(user_id=1))
+# delete_user(user_id=1)
+# print(get_users())
+
+
+# Services
+ServiceRepository.create_services()
+
+
+# Offices
+OfficeRepository.create_office("234 Main Street", "234-567-8901", [ServiceTypes.POOL, ServiceTypes.CROSSFIT])
+OfficeRepository.create_office("123 Main Street", "123-456-7890", [ServiceTypes.GYM, ServiceTypes.SAUNA])
+
+# print(get_offices())
+# print(get_offices()[0].services)
+OfficeRepository.add_service_to_office(1, ServiceTypes.SAUNA)
+
+# print(get_offices())
+# delete_office(1)
+# print(get_offices())
+
+# Subscriptions
+SubscriptionRepository.create_subscription(1, 1, datetime.datetime.now() + datetime.timedelta(days=30))
+print(SubscriptionRepository.get_subscriptions())
+# s = get_subscription(1)
+print(s := SubscriptionRepository.get_subscription(1))
+print(s.user)
+print(s.office)
+
+# u = get_user(1)
+# print(u.subscriptions)
