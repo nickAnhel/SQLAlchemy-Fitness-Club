@@ -15,7 +15,7 @@ class User(Base):
     email: Mapped[str]
     phone_number: Mapped[str | None]
 
-    subscriptions: Mapped[list["Subscription"]] = relationship(back_populates="user")
+    memberships: Mapped[list["Membership"]] = relationship(back_populates="user")
 
     created_at: Mapped[datetime.datetime] = mapped_column(server_default=func.now())  # type: ignore
     updated_at: Mapped[datetime.datetime] = mapped_column(server_default=func.now(), server_onupdate=func.now())  # type: ignore
@@ -46,31 +46,33 @@ class Office(Base):
     phone_number: Mapped[str]
 
     services: Mapped[list["Service"]] = relationship(back_populates="offices", secondary="office_services")
-    subscriptions: Mapped[list["Subscription"]] = relationship(back_populates="office")
+    memberships: Mapped[list["Membership"]] = relationship(back_populates="office")
 
 
 class OfficeService(Base):
     __tablename__ = "office_services"
 
-    id: Mapped[int] = mapped_column(primary_key=True)
+    # id: Mapped[int] = mapped_column(primary_key=True)
     office_id: Mapped[int] = mapped_column(
         ForeignKey("offices.id", ondelete="CASCADE"),
+        primary_key=True,
     )
     service_id: Mapped[int] = mapped_column(
         ForeignKey("services.id", ondelete="CASCADE"),
+        primary_key=True,
     )
 
 
-class Subscription(Base):
-    __tablename__ = "subscriptions"
+class Membership(Base):
+    __tablename__ = "memberships"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     active: Mapped[bool] = mapped_column(default=True)
 
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
     office_id: Mapped[int] = mapped_column(ForeignKey("offices.id", ondelete="CASCADE"))
-    user: Mapped["User"] = relationship(back_populates="subscriptions")
-    office: Mapped["Office"] = relationship(back_populates="subscriptions")
+    user: Mapped["User"] = relationship(back_populates="memberships")
+    office: Mapped["Office"] = relationship(back_populates="memberships")
 
     start_date: Mapped[datetime.datetime] = mapped_column(server_default=func.now())  # type: ignore
     end_date: Mapped[datetime.datetime]
