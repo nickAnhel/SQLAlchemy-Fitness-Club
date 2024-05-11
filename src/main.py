@@ -45,8 +45,6 @@ def main():
 
     # Change user phone number
     print("\nChange user phone number")
-    # Change user phone number
-    print("\nChange user phone number")
     print(
         UserRepository.get_user(user_id=1)
     )
@@ -72,7 +70,7 @@ def main():
 
     print("=====USERS=====")
 
-    print("=====SERVICES=====")
+    print("\n=====SERVICES=====")
 
     # Create all available services
     ServiceRepository.create_services()
@@ -106,7 +104,7 @@ def main():
 
     print("=====SERVICES=====")
 
-    print("=====OFFICES=====")
+    print("\n=====OFFICES=====")
 
     # Create offices
     OfficeRepository.create_office("123 Main Street", "123-456-7890", [ServiceTypes.GYM, ServiceTypes.SAUNA])
@@ -153,7 +151,7 @@ def main():
 
     print("=====OFFICES=====")
 
-    print("=====MEMBERSHIPS=====")
+    print("\n=====MEMBERSHIPS=====")
 
     # Create memberships
     MembershipRepository.create_membership(1, 1, datetime.datetime.now() + datetime.timedelta(days=30))
@@ -190,9 +188,6 @@ def main():
 
     print("=====MEMBERSHIPS=====")
 
-
-    # UserRepository.delete_user(1)
-    OfficeRepository.delete_office(1)
 
 if __name__ == "__main__":
     main()

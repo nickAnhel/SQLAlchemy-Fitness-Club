@@ -15,7 +15,10 @@ class User(Base):
     email: Mapped[str]
     phone_number: Mapped[str | None]
 
-    memberships: Mapped[list["Membership"]] = relationship(back_populates="user")
+    memberships: Mapped[list["Membership"]] = relationship(
+        back_populates="user",
+        cascade="all, delete",
+    )
 
     created_at: Mapped[datetime.datetime] = mapped_column(server_default=func.now())  # type: ignore
     updated_at: Mapped[datetime.datetime] = mapped_column(server_default=func.now(), server_onupdate=func.now())  # type: ignore
@@ -35,7 +38,10 @@ class Service(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     service_type: Mapped[ServiceTypes]
 
-    offices: Mapped[list["Office"]] = relationship(back_populates="services", secondary="office_services")
+    offices: Mapped[list["Office"]] = relationship(
+        back_populates="services",
+        secondary="office_services",
+    )
 
 
 class Office(Base):
@@ -45,20 +51,25 @@ class Office(Base):
     address: Mapped[str] = mapped_column(unique=True)
     phone_number: Mapped[str]
 
-    services: Mapped[list["Service"]] = relationship(back_populates="offices", secondary="office_services")
-    memberships: Mapped[list["Membership"]] = relationship(back_populates="office")
+    services: Mapped[list["Service"]] = relationship(
+        back_populates="offices",
+        secondary="office_services",
+    )
+    memberships: Mapped[list["Membership"]] = relationship(
+        back_populates="office",
+        cascade="all, delete",
+    )
 
 
 class OfficeService(Base):
     __tablename__ = "office_services"
 
-    # id: Mapped[int] = mapped_column(primary_key=True)
     office_id: Mapped[int] = mapped_column(
-        ForeignKey("offices.id", ondelete="CASCADE"),
+        ForeignKey("offices.id"),
         primary_key=True,
     )
     service_id: Mapped[int] = mapped_column(
-        ForeignKey("services.id", ondelete="CASCADE"),
+        ForeignKey("services.id"),
         primary_key=True,
     )
 
@@ -67,12 +78,15 @@ class Membership(Base):
     __tablename__ = "memberships"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    active: Mapped[bool] = mapped_column(default=True)
 
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
-    office_id: Mapped[int] = mapped_column(ForeignKey("offices.id", ondelete="CASCADE"))
-    user: Mapped["User"] = relationship(back_populates="memberships")
-    office: Mapped["Office"] = relationship(back_populates="memberships")
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    office_id: Mapped[int] = mapped_column(ForeignKey("offices.id"))
+    user: Mapped["User"] = relationship(
+        back_populates="memberships",
+    )
+    office: Mapped["Office"] = relationship(
+        back_populates="memberships",
+    )
 
     start_date: Mapped[datetime.datetime] = mapped_column(server_default=func.now())  # type: ignore
     end_date: Mapped[datetime.datetime]

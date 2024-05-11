@@ -62,11 +62,11 @@ class UserRepository:
     @staticmethod
     def delete_user(user_id: int):
         with session_factory() as session:
-            stmt = delete(User).filter_by(id=user_id)
-            session.execute(stmt)
+            # stmt = delete(User).filter_by(id=user_id)
+            # session.execute(stmt)
 
-            # user = session.query(User).filter_by(id=user_id)
-            # user.delete()
+            user = session.query(User).filter_by(id=user_id).first()
+            session.delete(user)
 
             session.commit()
 
@@ -109,11 +109,11 @@ class ServiceRepository:
     @staticmethod
     def delete_service(service_id: int):
         with session_factory() as session:
-            stmt = delete(Service).filter_by(id=service_id)
-            session.execute(stmt)
+            # stmt = delete(Service).filter_by(id=service_id)
+            # session.execute(stmt)
 
-            # service = session.query(Service).filter_by(id=service_id)
-            # service.delete()
+            service = session.query(Service).filter_by(id=service_id).first()
+            session.delete(service)
 
             session.commit()
 
@@ -169,11 +169,11 @@ class OfficeRepository:
     @staticmethod
     def delete_office(office_id: int):
         with session_factory() as session:
-            stmt = delete(Office).filter_by(id=office_id)
-            session.execute(stmt)
+            # stmt = delete(Office).filter_by(id=office_id)
+            # session.execute(stmt)
 
-            # office = session.query(Office).filter_by(id=office_id)
-            # office.delete()
+            office = session.query(Office).filter_by(id=office_id).first()
+            session.delete(office)
 
             session.commit()
 
